@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 struct Student {
@@ -49,9 +51,39 @@ void OutputList(const map<string, Student>& STL)
     cout << "---------------------------------------" << endl;
 }
 
-void SortByScore(map<string, Student>& STL)
+void SortByScore(map<string, Student>& STL, vector<Student>& students)
 {
-    cout << "To be developed..." << endl;
+    if (STL.empty()) {
+        cout << "No student data available, failed to perform." << endl;
+        return;
+    }
+
+    students.clear();
+    for (const auto& pair : STL) {
+        students.push_back(pair.second);
+    }
+    sort(students.begin(), students.end(), [](const Student& a, const Student& b) {
+        return a.score > b.score;
+    });
+}
+
+void ShowScoreSort(map<string, Student>& STL, vector<Student>& students)
+{
+    if (STL.empty()) {
+        return;
+    }
+
+    cout << "\n--- Score Sorted Students List ---" << endl;
+    cout << "---------------------------------------" << endl;
+    cout << "ID\t\tName\t\tScore" << endl;
+    cout << "---------------------------------------" << endl;
+
+    for (size_t i = 0; i < students.size(); i++) {
+        cout << students[i].id << "\t"
+             << students[i].name << "\t\t"
+             << students[i].score << endl;
+    }
+    cout << "---------------------------------------" << endl;
 }
 
 void IdSearch(map<string, Student>& STL)
@@ -68,6 +100,7 @@ int
 main()
 {
     map<string, Student> STL; //Use map to store the students data.
+    vector<Student> ScoreSortedSTL;
     int choice;
     do
     {
@@ -90,7 +123,9 @@ main()
                 OutputList(STL);
                 break;
             case 3:
-                SortByScore(STL);
+                SortByScore(STL, ScoreSortedSTL);
+                cout << "Sort Complete!!!\n";
+                ShowScoreSort(STL, ScoreSortedSTL);
                 break;
             case 4:
                 IdSearch(STL);
