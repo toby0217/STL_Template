@@ -13,6 +13,17 @@ struct Student {
 
 #define FULL_MARK 100 //Initialize the Full Mark to 100 points.
 
+//Include the template functions.
+template <class T>
+T getMax(T a, T b) {
+    return (a > b) ? a : b;
+}
+
+template <class T>
+T getMin(T a, T b) {
+    return (a < b) ? a : b;
+}
+
 void AddStudent(map<string, Student>& STL)
 {
     //1.Read the ID.
@@ -154,12 +165,9 @@ void ShowStatistics(map<string, Student>& STL)
             notPassed++;
         }
         
-        if (s > maxScore) {
-            maxScore = s;
-        }
-        if (s < minScore) {
-            minScore = s;
-        }
+        //Use the template functions to find maximum and minimum.
+        maxScore = getMax(maxScore, s);
+        minScore = getMin(minScore, s);
     }
 
     //3.Output the result.
