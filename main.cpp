@@ -11,33 +11,47 @@ struct Student {
     int score;
 };
 
+#define FULL_MARK 100 //Initialize the Full Mark to 100 points.
+
 void AddStudent(map<string, Student>& STL)
 {
+    //1.Read the ID.
     string stuId;
     cout << "Student Number(ID): ";
     cin >> stuId;
 
+    //2.If the ID already exists, refuse to store and print error.
     if (STL.find(stuId) != STL.end()) {
         cout << "Error: The Student Number already exists." << endl;
         return;
     }
     
+    //3.Read the student data, the Student object will be created in STL[ID].
+    //add the score check
     Student stu;
     stu.id = stuId;
     cout << "Student Name: ";
     cin >> stu.name;
     cout << "Score: ";
     cin >> stu.score;
+    while (stu.score < 0 || stu.score > FULL_MARK) {
+        cout << "Error score, please enter a vaild score again." << endl;
+        cout << "Score: ";
+        cin >> stu.score;
+    }
     STL[stuId] = stu;
 }
 
 void OutputList(const map<string, Student>& STL)
 {
+    //1.Empty check
     if (STL.empty()) {
         cout << "No student data available, failed to perform." << endl;
         return;
     }
 
+    //2.Print the students data which is sorted by ID.
+    cout << "Loading..." << endl;
     cout << "\n--- Students List ---" << endl;
     cout << "---------------------------------------" << endl;
     cout << "ID\t\tName\t\tScore" << endl;
@@ -53,11 +67,13 @@ void OutputList(const map<string, Student>& STL)
 
 void SortByScore(map<string, Student>& STL, vector<Student>& students)
 {
+    //1.Empty check
     if (STL.empty()) {
         cout << "No student data available, failed to perform." << endl;
         return;
     }
 
+    //2.Fill the vector, and use "sort" to sort the vector.
     students.clear();
     for (const auto& pair : STL) {
         students.push_back(pair.second);
@@ -69,10 +85,12 @@ void SortByScore(map<string, Student>& STL, vector<Student>& students)
 
 void ShowScoreSort(map<string, Student>& STL, vector<Student>& students)
 {
+    //1.Empty check
     if (STL.empty()) {
         return;
     }
 
+    //2.Print the students data which is sorted by score.
     cout << "\n--- Score Sorted Students List ---" << endl;
     cout << "---------------------------------------" << endl;
     cout << "ID\t\tName\t\tScore" << endl;
@@ -88,19 +106,76 @@ void ShowScoreSort(map<string, Student>& STL, vector<Student>& students)
 
 void IdSearch(map<string, Student>& STL)
 {
-    cout << "To be developed..." << endl;
+    //1.Empty check
+    if (STL.empty()) {
+        cout << "No student data available, failed to perform." << endl;
+        return;
+    }
+    
+    //2.Input ID
+    string searchId;
+    cout << "Enter the ID to search: ";
+    cin >> searchId;
+
+    //3.Search whether the ID exist, and output the student's data.
+    auto it = STL.find(searchId);
+    if (it == STL.end()) {
+        cout << "Cannot find this ID." << endl;
+    }
+    else {
+        cout << "Name: " << it->second.name << endl;
+        cout << "Score: " << it->second.score << endl;
+    }
 }
 
 void ShowStatistics(map<string, Student>& STL)
 {
-    cout << "To be developed..." << endl;
+    //1.Empty check
+    if (STL.empty()) {
+        cout << "No student data available, failed to perform." << endl;
+        return;
+    }
+
+    //2.Evaluate the sum and number of passed/not passed students, and find the maximum and minimum.
+    int totalScore = 0;
+    int passed = 0;
+    int notPassed = 0;
+    int maxScore = -1;
+    int minScore = FULL_MARK + 1;
+
+    for (const auto& pair : STL) {
+        int s = pair.second.score;
+        totalScore += s;
+
+        if (s >= 60) {
+            passed++;
+        }
+        else {
+            notPassed++;
+        }
+        
+        if (s > maxScore) {
+            maxScore = s;
+        }
+        if (s < minScore) {
+            minScore = s;
+        }
+    }
+
+    //3.Output the result.
+    cout << "\n--- Statistics ---" << endl;
+    cout << "Average: " << 1.0 * totalScore / STL.size() << endl;
+    cout << "Max: " << maxScore << endl;
+    cout << "Min: " << minScore << endl;
+    cout << "Passed: " << passed << endl;
+    cout << "Not Passed: " << notPassed << endl;
 }
 
 int
 main()
 {
     map<string, Student> STL; //Use map to store the students data.
-    vector<Student> ScoreSortedSTL;
+    vector<Student> ScoreSortedSTL; //Use vector to sort the data by score.
     int choice;
     do
     {
