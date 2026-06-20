@@ -69,7 +69,7 @@ void OutputList(const map<string, Student>& System)
     cout << "---------------------------------------" << endl;
 
     for (const auto& pair : System) {
-        cout << pair.second.id << "\t"
+        cout << pair.second.id << "\t\t"
              << pair.second.name << "\t\t"
              << pair.second.score << endl;
     }
@@ -108,7 +108,7 @@ void ShowScoreSort(map<string, Student>& System, vector<Student>& students)
     cout << "---------------------------------------" << endl;
 
     for (size_t i = 0; i < students.size(); i++) {
-        cout << students[i].id << "\t"
+        cout << students[i].id << "\t\t"
              << students[i].name << "\t\t"
              << students[i].score << endl;
     }
